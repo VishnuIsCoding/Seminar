@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph Structures | B.E. CSE (AI & ML)</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="academic-pro sidebar-collapsed">
+    <div class="presentation-wrapper">
+        <!-- Sidebar Toggle -->
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+
+        <!-- Navigation Sidebar -->
+        <nav class="side-nav" id="sidebar">
+            <div class="nav-header">UNIT V: Graph Structures</div>
+            <ul class="nav-links" id="nav-list">
+                <!-- Populated by JS -->
+            </ul>
+            <div class="nav-footer">
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div class="slide-info"><span id="curr-slide">1</span> / <span id="total-slides">10</span></div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="slide-container" id="slide-container">
+
+            <!-- ========== SLIDE 1: Title ========== -->
+            <section class="slide active" data-title="Title">
+                <div class="slide-content center">
+                    <span class="eyebrow">B.E. COMPUTER SCIENCE & ENGINEERING (AI & ML)</span>
+                    <h1>Graph Structures</h1>
+                    <p class="subtitle">ADT, Types, and Representations</p>
+
+                    <div class="title-overview">
+                        <div class="overview-row">
+                            <div class="overview-item">
+                                <div class="overview-label">Adjacency Matrix</div>
+                                <div class="overview-desc">2D V×V array — stores connections as 0s and 1s. O(V²) space.
+                                    Best for dense graphs.</div>
+                            </div>
+                            <div class="overview-item">
+                                <div class="overview-label">Adjacency List</div>
+                                <div class="overview-desc">Array of linked lists — each vertex stores its neighbor list.
+                                    O(V+E) space. Best for sparse graphs.</div>
+                            </div>
+                            <div class="overview-item">
+                                <div class="overview-label">Edge List</div>
+                                <div class="overview-desc">Simple list of all edges as tuples (u, v). O(E) space. Good
+                                    for Kruskal's algorithm.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+<!-- ========== WHITEBOARD 1 ========== -->
+<section class="slide whiteboard-slide" data-title="Whiteboard 1">
+    <div class="wb-toolbar">
+        <span class="wb-tool active" data-tool="pen">pen</span>
+        <span class="wb-tool" data-tool="erase">erase</span>
+        <span class="wb-tool" data-tool="clear">clear</span>
+    </div>
+    <canvas class="wb-canvas"></canvas>
+</section>
+
+
+            <!-- ========== SLIDE 2: Graph Definition ========== -->
+            <section class="slide" data-title="Definition">
+                <div class="slide-content">
+                    <h2>01. What is a Graph?</h2>
+                    <div class="rich-text">
+                        <p>A <strong>Graph</strong> is a non-linear data structure consisting of a finite set of
+                            vertices (also called nodes) connected by edges. Unlike a Tree, which enforces a strict
+                            parent-child hierarchy (one-to-many), a Graph allows <strong>many-to-many
+                                relationships</strong> between nodes — making it the most general and powerful data
+                            organization model.</p>
+
+                        <p>Formally, a graph <strong>G</strong> is defined as an ordered pair:</p>
+
+                        <div class="formula-box">G = (V, E)</div>
+
+                        <ul>
+                            <li><strong>V (Vertices / Nodes):</strong> A finite, non-empty set of objects. In a social
+                                network, each user is a vertex. In a road map, each intersection is a vertex.</li>
+                            <li><strong>E (Edges / Arcs):</strong> A set of pairs of vertices representing connections.
+                                In a social network, a friendship link is an edge. In a road map, a road segment is an
+                                edge.</li>
+                        </ul>
+
+                        <p><strong>Key Distinction from Trees:</strong> In a Tree structure, the relationship between
+                            parent and children is <em>one-to-many</em>. In a Graph, the relationship is
+                            <em>many-to-many</em> — any vertex can connect to any other vertex, and cycles are
+                            permitted.</p>
+
+                        <p><strong>Real-World Applications:</strong> Computer networks (routing), social networks
+                            (friend suggestions), web page indexing (Google PageRank), dependency resolution in
+                            compilers, GPS navigation systems, and neural network architectures.</p>
+                    </div>
+                </div>
+            </section>
+
+<!-- ========== WHITEBOARD 2 ========== -->
+<section class="slide whiteboard-slide" data-title="Whiteboard 2">
+    <div class="wb-toolbar">
+        <span class="wb-tool active" data-tool="pen">pen</span>
+        <span class="wb-tool" data-tool="erase">erase</span>
+        <span class="wb-tool" data-tool="clear">clear</span>
+    </div>
+    <canvas class="wb-canvas"></canvas>
+</section>
+
+
+            <!-- ========== SLIDE 3: Graph ADT ========== -->
+            <section class="slide" data-title="Graph ADT">
+                <div class="slide-content">
+                    <h2>02. Graph Abstract Data Type</h2>
+                    <div class="rich-text">
+                        <p>The Graph ADT defines <strong>what operations</strong> can be performed on a graph without
+                            specifying <strong>how</strong> the data is stored internally. This abstraction allows
+                            developers to swap between adjacency matrix and adjacency list implementations without
+                            changing the code that uses the graph.</p>
+                    </div>
+                    <div class="full-code-block">
+                        <div class="code-label">GraphADT.hpp — Complete Interface Definition</div>
+                        <pre><code>template &lt;typename T&gt;
+class GraphADT {
+public:
+    // ── Structural Modification ──
+    virtual void addVertex(const T& vertex) = 0;
+    virtual void removeVertex(const T& vertex) = 0;
+    virtual void addEdge(const T& src, const T& dest, int weight = 1) = 0;
+    virtual void removeEdge(const T& src, const T& dest) = 0;
+
+    // ── Query & Inspection ──
+    virtual bool isAdjacent(const T& u, const T& v) const = 0;
+    virtual int getDegree(const T& vertex) const = 0;
+    virtual int getInDegree(const T& vertex) const = 0;   // For digraphs
+    virtual int getOutDegree(const T& vertex) const = 0;  // For digraphs
+    virtual std::vector&lt;T&gt; getNeighbors(const T& vertex) const = 0;
+
+    // ── Traversal ──
+    virtual std::vector&lt;T&gt; getVertices() const = 0;
+    virtual std::vector&lt;std::pair&lt;T,T&gt;&gt; getEdges() const = 0;
+
+    // ── Status ──
+    virtual bool isEmpty() const = 0;
+    virtual int vertexCount() const = 0;
+    virtual int edgeCount() const = 0;
+    virtual void clear() = 0;
+
+    // ── Virtual Destructor ──
+    virtual ~GraphADT() = default;
+};</code></pre>
+                    </div>
+                </div>
+            </section>
+
+<!-- ========== WHITEBOARD 3 ========== -->
+<section class="slide whiteboard-slide" data-title="Whiteboard 3">
+    <div class="wb-toolbar">
+        <span class="wb-tool active" data-tool="pen">pen</span>
+        <span class="wb-tool" data-tool="erase">erase</span>
+        <span class="wb-tool" data-tool="clear">clear</span>
+    </div>
+    <canvas class="wb-canvas"></canvas>
+</section>
+
+
+            <!-- ========== SLIDE 4: ADT Operations ========== -->
+            <section class="slide" data-title="ADT Operations">
+                <div class="slide-content">
+                    <h2>03. ADT Operations in Detail</h2>
+                    <div class="ops-layout">
+                        <div class="op-block">
+                            <h4>Structural Operations</h4>
+                            <p>These operations modify the shape and size of the graph by adding or removing vertices
+                                and edges.</p>
+                            <ul>
+                                <li><code>addVertex(v)</code> — Insert a new node into the graph. Allocates space in the
+                                    internal data structure.</li>
+                                <li><code>removeVertex(v)</code> — Delete a node and <strong>all edges</strong> incident
+                                    to it.</li>
+                                <li><code>addEdge(u, v)</code> — Create a connection between two existing vertices.</li>
+                                <li><code>removeEdge(u, v)</code> — Delete the connection between two vertices.</li>
+                            </ul>
+                        </div>
+                        <div class="op-block">
+                            <h4>Query & Inspection Operations</h4>
+                            <p>These operations examine the current state of the graph without modifying it.</p>
+                            <ul>
+                                <li><code>isAdjacent(u, v)</code> — Returns true if there is an edge from u to v.</li>
+                                <li><code>getDegree(v)</code> — Returns the number of edges connected to vertex v.</li>
+                                <li><code>getNeighbors(v)</code> — Returns a list of all vertices directly connected to
+                                    v.</li>
+                                <li><code>getInDegree(v)</code> / <code>getOutDegree(v)</code> — For directed graphs,
+                                    returns the number of incoming / outgoing edges.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- ADT Interactive Widget -->
+                    <div class="adt-interactive">
+                        <div class="adt-controls">
+                            <div class="adt-controls-header">Live Graph Operations</div>
+                            <button class="adt-btn" id="btn-add-v" onclick="adtSim('addVertex')"><span class="op-icon">+</span> addVertex('E')</button>
+                            <button class="adt-btn" id="btn-add-e" onclick="adtSim('addEdge')" disabled><span class="op-icon">+</span> addEdge('D', 'E')</button>
+                            <button class="adt-btn" id="btn-rem-e" onclick="adtSim('removeEdge')"><span class="op-icon">-</span> removeEdge('A', 'C')</button>
+                            <button class="adt-btn" id="btn-rem-v" onclick="adtSim('removeVertex')"><span class="op-icon">-</span> removeVertex('B')</button>
+                            <button class="adt-btn reset-btn" onclick="adtSim('reset')">⟲ Reset Graph</button>
+                        </div>
+                        <div class="adt-canvas" id="adt-canvas">
+                            <!-- SVG Rendered via JS -->
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+<!-- ========== WHITEBOARD 4 ========== -->
+<section class="slide whiteboard-slide" data-title="Whiteboard 4">
+    <div class="wb-toolbar">
+        <span class="wb-tool active" data-tool="pen">pen</span>
+        <span class="wb-tool" data-tool="erase">erase</span>
+        <span class="wb-tool" data-tool="clear">clear</span>
+    </div>
+    <canvas class="wb-canvas"></canvas>
+</section>
+
+
+            <!-- ========== SLIDE 5: Directed Graphs ========== -->
+            <section class="slide" data-title="Directed Graphs">
+                <div class="slide-content">
+                    <h2>04. Directed Graph (Digraph)</h2>
+                    <div class="split-layout">
+                        <div class="split-left">
+                            <div class="rich-text">
+                                <p>In a <strong>Directed Graph (Digraph)</strong>, every edge has a specific direction.
+                                    An edge is an ordered pair <code>(u, v)</code>, meaning there is a path from vertex
+                                    <code>u</code> to vertex <code>v</code>, but <strong>not necessarily</strong> from
+                                    <code>v</code> back to <code>u</code>.</p>
+                                <p><strong>Key Property:</strong> <code>(u, v) ≠ (v, u)</code>. The relationship is
+                                    asymmetric.</p>
+                                <p><strong>Applications:</strong> Web page links (A links to B but B may not link to A),
+                                    task dependencies (A must finish before B), social media followers (A follows B but
+                                    B may not follow A).</p>
+                            </div>
+                            <div class="full-code-block">
+                                <div class="code-label">DirectedGraph.cpp</div>
+                                <pre><code>class DirectedGraph {
+    int V;
+    std::vector&lt;std::list&lt;int&gt;&gt; adj;
+
+public:
+    DirectedGraph(int vertices) : V(vertices), adj(vertices) {}
+
+    void addEdge(int u, int v) {
+        // Only add in ONE direction (u → v)
+        adj[u].push_back(v);
+        std::cout &lt;&lt; "Edge added: " &lt;&lt; u &lt;&lt; " → " &lt;&lt; v &lt;&lt; std::endl;
+    }
+
+    int getInDegree(int v) {
+        int count = 0;
+        for (int i = 0; i &lt; V; i++) {
+            for (int neighbor : adj[i]) {
+                if (neighbor == v) count++;
+            }
+        }
+        return count;
+    }
+
+    int getOutDegree(int v) {
+        return adj[v].size();
+    }
+};</code></pre>
+                                <button class="run-btn" onclick="simulate('directed')">▶ Run Simulation</button>
+                            </div>
+                        </div>
+                        <div class="split-right">
+                            <div class="execution-pane">
+                                <div class="exec-header">RUNTIME VISUALIZER</div>
+                                <div class="exec-canvas" id="directed-exec"></div>
+                                <div class="exec-log" id="directed-log">> Awaiting execution...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+<!-- ========== WHITEBOARD 5 ========== -->
+<section class="slide whiteboard-slide" data-title="Whiteboard 5">
+    <div class="wb-toolbar">
+        <span class="wb-tool active" data-tool="pen">pen</span>
+        <span class="wb-tool" data-tool="erase">erase</span>
+        <span class="wb-tool" data-tool="clear">clear</span>
+    </div>
+    <canvas class="wb-canvas"></canvas>
+</section>
+
+
+            <!-- ========== SLIDE 6: Undirected Graphs ========== -->
+            <section class="slide" data-title="Undirected Graphs">
+                <div class="slide-content">
+                    <h2>05. Undirected Graph</h2>
+                    <div class="split-layout">
+                        <div class="split-left">
+                            <div class="rich-text">
+                                <p>In an <strong>Undirected Graph</strong>, edges have no direction — the connection is
+                                    mutual and symmetric. If vertex <code>A</code> is connected to vertex
+                                    <code>B</code>, then <code>B</code> is automatically connected to <code>A</code>.
+                                </p>
+                                <p><strong>Key Property:</strong> <code>(u, v) = (v, u)</code>. Every edge is
+                                    bidirectional.</p>
+                                <p><strong>Applications:</strong> Social network friendships (mutual), physical cables
+                                    in a LAN, chemical bonds between atoms, collaboration networks.</p>
+                            </div>
+                            <div class="full-code-block">
+                                <div class="code-label">UndirectedGraph.cpp</div>
+                                <pre><code>class UndirectedGraph {
+    int V;
+    std::vector&lt;std::list&lt;int&gt;&gt; adj;
+
+public:
+    UndirectedGraph(int vertices) : V(vertices), adj(vertices) {}
+
+    void addEdge(int u, int v) {
+        // Add in BOTH directions (bidirectional)
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+        std::cout &lt;&lt; "Link: " &lt;&lt; u &lt;&lt; " ↔ " &lt;&lt; v &lt;&lt; std::endl;
+    }
+
+    int getDegree(int v) {
+        return adj[v].size();
+    }
+
+    void printNeighbors(int v) {
+        std::cout &lt;&lt; "Neighbors of " &lt;&lt; v &lt;&lt; ": ";
+        for (int n : adj[v]) {
+            std::cout &lt;&lt; n &lt;&lt; " ";
+        }
+        std::cout &lt;&lt; std::endl;
+    }
+};</code></pre>
+                                <button class="run-btn" onclick="simulate('undirected')">▶ Run Simulation</button>
+                            </div>
+                        </div>
+                        <div class="split-right">
+                            <div class="execution-pane">
+                                <div class="exec-header">RUNTIME VISUALIZER</div>
+                                <div class="exec-canvas" id="undirected-exec"></div>
+                                <div class="exec-log" id="undirected-log">> Awaiting execution...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+<!-- ========== WHITEBOARD 6 ========== -->
+<section class="slide whiteboard-slide" data-title="Whiteboard 6">
+    <div class="wb-toolbar">
+        <span class="wb-tool active" data-tool="pen">pen</span>
+        <span class="wb-tool" data-tool="erase">erase</span>
+        <span class="wb-tool" data-tool="clear">clear</span>
+    </div>
+    <canvas class="wb-canvas"></canvas>
+</section>
+
+
+            <!-- ========== SLIDE 7: Weighted Graphs ========== -->
+            <section class="slide" data-title="Weighted Graphs">
+                <div class="slide-content">
+                    <h2>06. Weighted Graph</h2>
+                    <div class="split-layout">
+                        <div class="split-left">
+                            <div class="rich-text">
+                                <p>A <strong>Weighted Graph</strong> assigns a numerical value (called a <em>weight</em>
+                                    or <em>cost</em>) to each edge. This value typically represents distance, travel
+                                    time, bandwidth, or monetary cost.</p>
+                                <p><strong>Key Property:</strong> Each edge <code>(u, v)</code> carries a third
+                                    parameter <code>w</code> — the weight.</p>
+                                <p><strong>Applications:</strong> GPS navigation (shortest distance), airline route
+                                    optimization (cheapest fare), network routing (minimum latency), Dijkstra's and
+                                    Prim's algorithms.</p>
+                            </div>
+                            <div class="full-code-block">
+                                <div class="code-label">WeightedGraph.cpp</div>
+                                <pre><code>struct Edge {
+    int destination;
+    int weight;
+};
+
+class WeightedGraph {
+    int V;
+    std::vector&lt;std::list&lt;Edge&gt;&gt; adj;
+
+public:
+    WeightedGraph(int vertices) : V(vertices), adj(vertices) {}
+
+    void addEdge(int src, int dest, int weight) {
+        adj[src].push_back({dest, weight});
+        // For undirected weighted:
+        // adj[dest].push_back({src, weight});
+        std::cout &lt;&lt; src &lt;&lt; " --(" &lt;&lt; weight &lt;&lt; ")--&gt; " &lt;&lt; dest &lt;&lt; std::endl;
+    }
+
+    int getEdgeWeight(int u, int v) {
+        for (const Edge& e : adj[u]) {
+            if (e.destination == v) return e.weight;
+        }
+        return -1; // Edge not found
+    }
+};</code></pre>
+                                <button class="run-btn" onclick="simulate('weighted')">▶ Run Simulation</button>
+                            </div>
+                        </div>
+                        <div class="split-right">
+                            <div class="execution-pane">
+                                <div class="exec-header">RUNTIME VISUALIZER</div>
+                                <div class="exec-canvas" id="weighted-exec"></div>
+                                <div class="exec-log" id="weighted-log">> Awaiting execution...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+<!-- ========== WHITEBOARD 7 ========== -->
+<section class="slide whiteboard-slide" data-title="Whiteboard 7">
+    <div class="wb-toolbar">
+        <span class="wb-tool active" data-tool="pen">pen</span>
+        <span class="wb-tool" data-tool="erase">erase</span>
+        <span class="wb-tool" data-tool="clear">clear</span>
+    </div>
+    <canvas class="wb-canvas"></canvas>
+</section>
+
+
+            <!-- ========== SLIDE 8: Adjacency Matrix ========== -->
+            <section class="slide" data-title="Adjacency Matrix">
+                <div class="slide-content">
+                    <h2>07. Adjacency Matrix Representation</h2>
+                    <div class="split-layout">
+                        <div class="split-left">
+                            <div class="rich-text">
+                                <p>The <strong>Adjacency Matrix</strong> is a 2D array of size <code>V × V</code>. The
+                                    cell <code>M[i][j]</code> stores <code>1</code> if an edge exists between vertex
+                                    <code>i</code> and vertex <code>j</code>, otherwise <code>0</code>. For weighted
+                                    graphs, the cell stores the edge weight instead of 1.</p>
+                                <ul>
+                                    <li><strong>Space:</strong> O(V²) — requires a full V×V grid regardless of edge
+                                        count.</li>
+                                    <li><strong>Edge Lookup:</strong> O(1) — direct array access.</li>
+                                    <li><strong>Find Neighbors:</strong> O(V) — must scan entire row.</li>
+                                    <li><strong>Best For:</strong> Dense graphs where E ≈ V².</li>
+                                </ul>
+                            </div>
+                            <div class="full-code-block">
+                                <div class="code-label">AdjacencyMatrix.cpp</div>
+                                <pre><code>class AdjacencyMatrix {
+    int V;
+    int** matrix;
+
+public:
+    AdjacencyMatrix(int numVertices) : V(numVertices) {
+        matrix = new int*[V];
+        for (int i = 0; i &lt; V; i++) {
+            matrix[i] = new int[V]();  // Zero-initialize
+        }
+    }
+
+    void addEdge(int u, int v) {
+        matrix[u][v] = 1;
+        matrix[v][u] = 1;  // Remove for directed
+    }
+
+    bool hasEdge(int u, int v) {
+        return matrix[u][v] == 1;
+    }
+
+    void printMatrix() {
+        for (int i = 0; i &lt; V; i++) {
+            for (int j = 0; j &lt; V; j++) {
+                std::cout &lt;&lt; matrix[i][j] &lt;&lt; " ";
+            }
+            std::cout &lt;&lt; std::endl;
+        }
+    }
+
+    ~AdjacencyMatrix() {
+        for (int i = 0; i &lt; V; i++) delete[] matrix[i];
+        delete[] matrix;
+    }
+};</code></pre>
+                                <button class="run-btn" onclick="simulate('matrix')">▶ Show Matrix</button>
+                            </div>
+                        </div>
+                        <div class="split-right">
+                            <div class="execution-pane">
+                                <div class="exec-header">MATRIX OUTPUT</div>
+                                <div class="exec-canvas" id="matrix-exec"
+                                    style="align-items: flex-start; padding-top: 40px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+<!-- ========== WHITEBOARD 8 ========== -->
+<section class="slide whiteboard-slide" data-title="Whiteboard 8">
+    <div class="wb-toolbar">
+        <span class="wb-tool active" data-tool="pen">pen</span>
+        <span class="wb-tool" data-tool="erase">erase</span>
+        <span class="wb-tool" data-tool="clear">clear</span>
+    </div>
+    <canvas class="wb-canvas"></canvas>
+</section>
+
+
+            <!-- ========== SLIDE 9: Adjacency List ========== -->
+            <section class="slide" data-title="Adjacency List">
+                <div class="slide-content">
+                    <h2>08. Adjacency List Representation</h2>
+                    <div class="split-layout">
+                        <div class="split-left">
+                            <div class="rich-text">
+                                <p>The <strong>Adjacency List</strong> uses an array of linked lists (or vectors). Each
+                                    index <code>i</code> in the array corresponds to vertex <code>i</code>, and the
+                                    linked list at that index contains all vertices adjacent to <code>i</code>.</p>
+                                <ul>
+                                    <li><strong>Space:</strong> O(V + E) — stores only existing edges, highly
+                                        memory-efficient.</li>
+                                    <li><strong>Edge Lookup:</strong> O(V) worst case — must traverse the list.</li>
+                                    <li><strong>Find Neighbors:</strong> O(degree) — extremely fast neighbor traversal.
+                                    </li>
+                                    <li><strong>Best For:</strong> Sparse graphs (most real-world networks).</li>
+                                </ul>
+                            </div>
+                            <div class="full-code-block">
+                                <div class="code-label">AdjacencyList.cpp</div>
+                                <pre><code>class AdjacencyList {
+    int V;
+    std::vector&lt;std::list&lt;int&gt;&gt; adj;
+
+public:
+    AdjacencyList(int numVertices) : V(numVertices), adj(numVertices) {}
+
+    void addEdge(int u, int v) {
+        adj[u].push_back(v);
+        adj[v].push_back(u);  // Remove for directed
+    }
+
+    bool hasEdge(int u, int v) {
+        for (int neighbor : adj[u]) {
+            if (neighbor == v) return true;
+        }
+        return false;
+    }
+
+    void printList() {
+        for (int i = 0; i &lt; V; i++) {
+            std::cout &lt;&lt; i &lt;&lt; ": ";
+            for (int neighbor : adj[i]) {
+                std::cout &lt;&lt; neighbor &lt;&lt; " → ";
+            }
+            std::cout &lt;&lt; "NULL" &lt;&lt; std::endl;
+        }
+    }
+};</code></pre>
+                                <button class="run-btn" onclick="simulate('list')">▶ Build Map</button>
+                            </div>
+                        </div>
+                        <div class="split-right">
+                            <div class="execution-pane">
+                                <div class="exec-header">LIST OUTPUT</div>
+                                <div class="exec-canvas" id="list-exec"
+                                    style="align-items: flex-start; padding-top: 40px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+<!-- ========== WHITEBOARD 9 ========== -->
+<section class="slide whiteboard-slide" data-title="Whiteboard 9">
+    <div class="wb-toolbar">
+        <span class="wb-tool active" data-tool="pen">pen</span>
+        <span class="wb-tool" data-tool="erase">erase</span>
+        <span class="wb-tool" data-tool="clear">clear</span>
+    </div>
+    <canvas class="wb-canvas"></canvas>
+</section>
+
+
+            <!-- ========== SLIDE 10: Complexity Comparison ========== -->
+            <section class="slide" data-title="Comparison">
+                <div class="slide-content">
+                    <h2>09. Complexity Analysis</h2>
+                    <div class="rich-text">
+                        <p>Choosing between Adjacency Matrix and Adjacency List depends on the density of the graph and
+                            which operations are performed most frequently. Below is a detailed comparison.</p>
+                    </div>
+                    <table class="academic-table">
+                        <thead>
+                            <tr>
+                                <th>Operation</th>
+                                <th>Adjacency Matrix</th>
+                                <th>Adjacency List</th>
+                                <th>When to Prefer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Space</td>
+                                <td>O(V²)</td>
+                                <td>O(V + E)</td>
+                                <td>List for sparse, Matrix for dense</td>
+                            </tr>
+                            <tr>
+                                <td>Add Vertex</td>
+                                <td>O(V²) — rebuild</td>
+                                <td>O(1)</td>
+                                <td>List for dynamic growth</td>
+                            </tr>
+                            <tr>
+                                <td>Add Edge</td>
+                                <td>O(1)</td>
+                                <td>O(1)</td>
+                                <td>Both efficient</td>
+                            </tr>
+                            <tr>
+                                <td>Check Edge (u,v)</td>
+                                <td>O(1)</td>
+                                <td>O(V)</td>
+                                <td>Matrix for frequent lookups</td>
+                            </tr>
+                            <tr>
+                                <td>Find All Neighbors</td>
+                                <td>O(V)</td>
+                                <td>O(degree)</td>
+                                <td>List for BFS/DFS traversals</td>
+                            </tr>
+                            <tr>
+                                <td>Remove Edge</td>
+                                <td>O(1)</td>
+                                <td>O(V)</td>
+                                <td>Matrix for frequent removals</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+<!-- ========== WHITEBOARD 10 ========== -->
+<section class="slide whiteboard-slide" data-title="Whiteboard 10">
+    <div class="wb-toolbar">
+        <span class="wb-tool active" data-tool="pen">pen</span>
+        <span class="wb-tool" data-tool="erase">erase</span>
+        <span class="wb-tool" data-tool="clear">clear</span>
+    </div>
+    <canvas class="wb-canvas"></canvas>
+</section>
+
+
+            <!-- ========== SLIDE 11: Summary ========== -->
+            <section class="slide" data-title="Summary">
+                <div class="slide-content center">
+                    <h2>Summary & Key Takeaways</h2>
+                    <div class="summary-grid">
+                        <div class="sum-card">
+                            <h4>Graph = G(V, E)</h4>
+                            <p>The most versatile non-linear data structure, capable of modeling any many-to-many
+                                relationship in real-world systems.</p>
+                        </div>
+                        <div class="sum-card">
+                            <h4>ADT ≠ Implementation</h4>
+                            <p>The Graph ADT separates interface from storage. We can swap Matrix for List without
+                                changing application logic.</p>
+                        </div>
+                        <div class="sum-card">
+                            <h4>Choose Wisely</h4>
+                            <p>Dense graphs → Matrix (O(1) lookups). Sparse graphs → List (O(V+E) memory). Most
+                                real-world graphs are sparse.</p>
+                        </div>
+                    </div>
+                    <p class="final-note">End of Presentation — Graph Structures // B.E. CSE (AI & ML)</p>
+                    <p class="copyright-text">© VishnuIsCoding</p>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Presentation Controls -->
+        <div class="pres-controls">
+            <button id="prevBtn" class="control-btn">← PREVIOUS</button>
+            <button id="nextBtn" class="control-btn">NEXT →</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
