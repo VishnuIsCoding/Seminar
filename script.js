@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         canvas.addEventListener('pointerup', stop);
         canvas.addEventListener('pointerout', stop);
+        canvas.addEventListener('pointercancel', stop);
 
         function draw(e) {
             const pos = getPos(e);
@@ -94,6 +95,15 @@ document.addEventListener('DOMContentLoaded', () => {
     sidebarToggle.addEventListener('click', () => {
         document.body.classList.toggle('sidebar-collapsed');
     });
+
+    // ── Mobile View Toggle ──
+    const mobileViewToggle = document.getElementById('mobileViewToggle');
+    if (mobileViewToggle) {
+        mobileViewToggle.addEventListener('click', () => {
+            document.body.classList.toggle('mobile-mode');
+            mobileViewToggle.classList.toggle('active');
+        });
+    }
 
     // ── Populate Sidebar ──
     slides.forEach((slide, i) => {
