@@ -730,6 +730,7 @@ h2 {
     top: 0;
     left: 0;
     z-index: 5;
+    touch-action: none;
 }
 
 .wb-toolbar {
@@ -790,4 +791,122 @@ h2 {
     color: #adb5bd;
     letter-spacing: 0.5px;
     user-select: none;
+}
+
+/* ───────── MOBILE VIEW TOGGLE ───────── */
+.mobile-toggle-btn {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 999;
+    padding: 6px 12px;
+    background: #fff;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: var(--transition);
+}
+.mobile-toggle-btn:hover {
+    background: var(--primary);
+    color: #fff;
+}
+.mobile-toggle-btn.active {
+    background: var(--primary);
+    color: #fff;
+}
+
+/* ───────── COMPACT MOBILE MODE ───────── */
+body.mobile-mode h1 {
+    font-size: 2.2rem;
+    margin-bottom: 8px;
+}
+body.mobile-mode h2 {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+}
+body.mobile-mode .subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+body.mobile-mode .rich-text p {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    margin-bottom: 12px;
+}
+body.mobile-mode .rich-text ul li {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 8px;
+}
+body.mobile-mode .formula-box {
+    font-size: 1.2rem;
+    padding: 10px 15px;
+    margin: 15px 0;
+}
+body.mobile-mode .slide {
+    padding: 70px 20px 80px 20px !important;
+}
+body.mobile-mode .whiteboard-slide {
+    padding: 0 !important;
+}
+body.mobile-mode .full-code-block pre {
+    padding: 12px;
+}
+body.mobile-mode .full-code-block pre code {
+    font-size: 0.8rem;
+}
+body.mobile-mode .exec-canvas {
+    min-height: 180px;
+    padding: 10px;
+}
+body.mobile-mode .adt-interactive {
+    flex-direction: column;
+    height: auto;
+}
+body.mobile-mode .adt-controls {
+    width: 100%;
+    border-right: none;
+    border-bottom: 2px solid var(--border);
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 12px;
+}
+body.mobile-mode .adt-btn {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    flex: 1 1 45%;
+}
+body.mobile-mode .adt-controls-header {
+    width: 100%;
+    margin-bottom: 5px;
+}
+body.mobile-mode .pres-controls {
+    bottom: 15px;
+    right: 50%;
+    transform: translateX(50%);
+    width: max-content;
+}
+body.mobile-mode .control-btn {
+    padding: 10px 20px;
+    font-size: 0.8rem;
+}
+body.mobile-mode .split-layout {
+    gap: 15px;
+}
+body.mobile-mode .overview-row {
+    gap: 15px;
+}
+body.mobile-mode .academic-table td, body.mobile-mode .academic-table th {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+}
+body.mobile-mode .nav-header {
+    padding: 0 10px 10px;
+}
+body.mobile-mode .nav-item {
+    padding: 10px;
 }
